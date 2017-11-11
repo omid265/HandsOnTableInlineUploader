@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset='utf-8'>
+  <title>My custom - Handsontable</title>
+
+  <link rel="stylesheet" media="screen" href="dist/handsontable.css">
+  <link rel="stylesheet" media="screen" href="dist/modal.css">
+  <link href="dist/task.css" rel="stylesheet">
+  
+  <script src="dist/handsontable.js"></script>
+  <script src="dist/jquery.min.js"></script>
+  <script src="dist/vue/vue.min.js"></script>
+  <script src="dist/vue/vue-resource.min.js"></script>
+  <script src="dist/vue/vue.pretty-bytes.js"></script>
+  <script src="dist/vue/bluebird.min.js"></script>
+  <script src="dist/globals.js"></script>
+ 
+ 
+  <script data-jsfiddle="common">
+    var d=[{
+      "link": "Upload",
+      "Progress":"",
+      "year": [],
+      "chassis": "black",
+      "bumper": "black"
+    }];
+
+    function getCarData(d) {
+      // console.log(d);
+      // d=JSON.parse(d);
+      // console.log()
+      return d;
+
+      // return [{
+      //   "car": "Upload",
+      //   "year": "<a href='i1'>aa</a>,<a href='i2'>aa</a>,<a href='i3'>aa</a>",
+      //   "chassis": "black",
+      //   "bumper": "black"
+      // }];
+    }
+  </script>
+</head>
+
+<body style="padding:50px;" >
+    <div class="container" id="app">
+        <div class="row">
+            <div class="col-sm-12">
+              <div class="form-group">
+                <file-upload v-for="(uf,key) in uploadForms" :fmx="UploadForm" ref="UploaderElements" :Myonp="onp" :ikey="key" class="my-file-uploader" :au2="afc" ftype="pdf" name="myFile" action="upload"></file-upload>
+              </div>
+            </div>
+        </div>
+      </div>
+        
+        <div id="example1"></div>
+          
+          <modal id="modalApp" v-bind:Message="Message" v-if="showModal" @close="close('',myAfterClose)"></modal>
+
+          <script >
+            
+            function UploadButtom(instance, td, row, col, prop, value, cellProperties) {
+              Handsontable.renderers.TextRenderer.apply(this, arguments);
+              td.style.fontStyle = 'italic';
+              td.innerHTML='<button onclick="AddUploader()">Upload</button>'
+              td.style.background = '';
+            }///////// end uploader function
+            
+            function ProgressBar(instance, td, row, col, prop, value, cellProperties){
+              Handsontable.renderers.TextRenderer.apply(this,arguments);
+              td.innerHTML='<div class="progress" style="margin-bottom:0px;">\
+                              <div class="progress-bar progress-bar-striped" role="progressbar" :aria-valuenow="fileProgress" aria-valuemin="0" aria-valuemax="100" style="width:'+value+'%" :style="{width:'+value+'+\'%\'}">\
+                                '+value+'%\
+                              </div>\
+                            </div>';
+            }/// end ProgressBar formatter
+
+            function contentLink(instance, td, row, col, prop, value, cellProperties) {
+              Handsontable.renderers.TextRenderer.apply(this, arguments);
+              td.style.fontStyle = 'italic';
+              td.innerHTML="";
+              value.forEach(function(element) {
+                if(element.Title!=undefined){
+                    td.innerHTML+='<a href="'+element.Link+'">'+element.Title +'</a>&nbsp;|&nbsp;'
+                  }
+              }, this); //// End Foreach
+
+            }///// End contentLink
+
+            // maps function to lookup string
+            Handsontable.renderers.registerRenderer('UploadButtom', UploadButtom);
+            Handsontable.renderers.registerRenderer('contentLink', contentLink);
+            Handsontable.renderers.registerRenderer('ProgressBar', ProgressBar);
+
+            var container1 = document.getElementById('example1'),hot1;
+            var c,r;
+            hot1 = new Handsontable(container1, {
+                data: getCarData(d),
+                minSpareRows: 1,
+                colHeaders: ['Upload Files here','Progress', 'year', 'Chassis color', 'Bumper color'],
+                columns: [
+                  {
+                    data: 'Upload Files here',
+                    readOnly: true
+                  },
+                
+                  {
+                    data: 'Progress'
+                    ,readOnly:true
+                  },
+                  {
+                    data: 'year'
+                    ,readOnly:true
+                  },
+                  {
+                    data: 'chassis'
+                  },
+                  {
+                    data: 'bumper'
+                  }
+                ]
+                ,cells: function (row, col, prop) {
+                  var cellProperties = {};
+                  if(col==0){
+                    // if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
+                      cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+                      cellProperties.renderer = "UploadButtom"; // uses lookup map
+                    // }
+                  }
+                  if(prop=='year'){
+                    // if (row === 0 || this.instance.getData()[row][col] === 'readOnly') {
+                      cellProperties.readOnly = true; // make cell read-only if it is first row or the text reads 'readOnly'
+                      cellProperties.renderer = "contentLink"; // uses lookup map
+                    // }
+                  }
+                  if(prop=='Progress'){
+                    cellProperties.readOnly=true;
+                    cellProperties.renderer="ProgressBar";
+                  }
+                  return cellProperties;
+                }
+              });
+              hot1.updateSettings({
+                afterSelection:function(){
+                    c=hot1.getSelectedRange().from.col;
+                    r=hot1.getSelectedRange().from.row;
+                  }
+              });
+
+              function myAfterClose(){
+                    d[r].year.push({"Link":"3251","Title":"Link 01"});
+                    hot1.render();
+                }
+              function OpenUpload(){
+                // modal.Message.Header.Visibility=true;
+                // modal.Message.Header.Text='Header Text';
+                modal.Message.Body.Visibility=true;
+                modal.Message.Body.Text="Upload form";
+                modal.Message.Footer.Visibility=true;
+                modal.Message.Footer.Button.Text="Upload Done";
+                modal.showModal = true;
+              }
+              function AddUploader(){
+                var uploaderIndex=Uploader.addUploader(r,c,function(newID){
+                  var thisId=newID-1;
+                  if(thisId<0){
+                    thisId=0;
+                  }
+                  //// cU= Current Uploader
+                  var cU=Uploader.$refs.UploaderElements[thisId];
+                  cU.cell={"col":c,"row":r}
+                  // console.log(cU.cell.row);
+                  cU.openBrowser(cU.cell);
+
+                });
+                
+              }
+              function onp(ColIndex,pv){
+                // console.log(ColIndex.row);
+                // console.log('In Progress');
+                try{
+                  d[ColIndex.row].Progress=pv;
+                if(pv%10==0)
+                  hot1.render();
+                }catch(e){
+                  console.log(e);
+                }
+              }
+              function afc(rowIndex,cellIndex,FileDetails){
+                d[rowIndex].year.push({"ID":FileDetails.Id,"Link":FileDetails.Id,"Title":FileDetails.FileName});
+                hot1.render();
+            }
+          </script>
+  <script src="dist/modal.js"></script>
+  <script src="dist/uploader/vue.file-upload.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+
+body{
+    font-size: 13px;
+    min-height:650px;
+    min-width:900px;
+    padding:25px;
+}
+
+
+/************** [ Start Uploader ] ******************/
+#drop_zone {
+    border: 1.5px dashed #bbb;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    padding: 0px;
+    text-align: center;
+    font: 20pt bold 'Vollkorn';
+    color: #bbb;
+    cursor: pointer;
+}
+
+.uploadDone {
+    border: 0px !important;
+    cursor: default !important;
+}
+
+.progress-bar {
+    opacity: 1;
+    height: 21px;
+    margin: 0.0em 0;
+    width: 0;
+    background: green;
+    color:#fff;
+    text-align: center;
+}
+
+#drop_zone table {
+    margin-bottom: 0px !important;
+}
+
+    #drop_zone table td {
+        padding: 5px !important;
+    }
+
+#drop_zone .browse {
+    font-size: 125%;
+    font-weight: 300;
+    /*background-image: url('../assets/images/D&D-bg.png');*/
+    background-repeat: no-repeat;
+    background-position: center center;
+    width: 100%;
+    background-color: transparent;
+    border: 0px;
+    color: #adadad;
+    /*cursor:pointer;*/
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin:0px;
+    cursor:pointer;
+}
+#drop_zone .browse[disabled=disabled]:hover{
+    cursor:no-drop;
+}
+#tabs-Documents table td:nth-child(2),#tabs-Documents table th:nth-child(2) {
+    min-width: 4rem;
+}
+.my-sm-col{
+    width:20px;
+}
+/************** [ End Uploader ] ******************/
+
+
+.delete {
+    color: #f15c5c!important;
+    font-size: 13px;
+    cursor: pointer;
+    border:0px !important;
+}
+.deleteFile{
+    width:50px;
+    display:block;
+}
+.delete:visited {
+    color: #f15c5c!important;
+}
+.add-link {
+    color: #0072c6!important;
+    font-size: 13px;
+    cursor: pointer;
+    border:0px !important;
+}
+.icon{
+    margin-right:8px;
+    vertical-align: middle;
+}
+a.add-link:visited {
+    color: #0072c6!important;
+}
+.delete:hover,.add-link:hover {
+    text-decoration: underline!important;
+}
+
+/* ####################### [Start Input Style] ####################### */
+.taskBTN{
+    border: 1px solid lightgray;
+    background-color: #EBE9E9;
+    color: #5a5a5a;
+    font-family: -apple-system,system-ui,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    padding:6px;
+    padding-left:8px;
+    padding-right:8px;
+    font-size: 13px!important;
+    font-weight: 400;
+    min-width: 6em;
+    margin-right: 0.2rem;
+}
+input[type=button]:hover, input[type=reset]:hover, input[type=submit]:hover, button:hover {
+    border-color: #92c0e0;
+    background-color: #e6f2fa;
+    background-color: #e6f2fa;
+}
+
+/* ####################### [End Input Style] ####################### */
+
+/* ############### [ Start Circle Loading ] ############### */
+.circleLoader {
+  border-style:solid;
+  border-color: #f3f3f3;
+
+  border-radius: 50%;
+  
+  -webkit-animation: spin 2s linear infinite;
+  animation: spin 2s linear infinite;
+  float: left;
+  margin-right: 5px;
+  margin-top: 5px;
+}
+.loader-s{
+  width: 16px;
+  height: 16px;
+  border-top: 3px solid #3498db;
+  border-bottom: 3px solid #3498db;
+}
+
+.loader-m{
+  width: 24px;
+  height: 24px;
+  border-top: 3px solid #3498db;
+  border-bottom: 3px solid #3498db;
+}
+
+
+@-webkit-keyframes spin {
+  0% { -webkit-transform: rotate(0deg); }
+  100% { -webkit-transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
